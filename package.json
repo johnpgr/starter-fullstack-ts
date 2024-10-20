@@ -1,0 +1,21 @@
+{
+  "name": "my-fullstack-framework",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare": "ts-patch install && typia patch"
+  },
+  "author": "johnpgr",
+  "license": "UNLICENSED",
+  "description": "",
+  "devDependencies": {
+    "ts-patch": "^3.2.1",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.4.0",
+    "hyper-express": "^6.17.2",
+    "typia": "^6.11.2"
+  }
+}
