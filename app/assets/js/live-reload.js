@@ -31,4 +31,4 @@ function startAutoRefresh(refreshNow = false, restartDelay = 0) {
     })
 }
 
-if (typeof window !== "undefined") startAutoRefresh()
+startAutoRefresh()

@@ -25,20 +25,23 @@ export const assets: MiddlewareHandler = (req, res) => {
     // Return a 404 if no asset/file exists on the derived path
     if (!file) return res.status(404).send()
 
+    // Get the file extension
     const fileParts = file.path.split(".")
     const extension = fileParts[fileParts.length - 1]
     if (!extension) return res.status(404).send()
 
-    // Set Cache-Control header to cache the asset for 1 year
-    res.set("Cache-Control", "public, max-age=31536000");
-    // Set ETag header for cache validation
-    res.set("ETag", file.etag);
+    // Check if the client has the latest version of the file
+    const clientEtag = req.headers["if-none-match"]
+    if (clientEtag === file.etag) {
+        res.status(304).send()
+        return
+    }
 
     if (file.content instanceof Buffer) {
         // Set appropriate mime-type and serve file content Buffer as response body (This means that the file content was cached in memory)
-        return res.type(extension).send(file.content)
+        res.setHeader("ETag", file.etag).type(extension).send(file.content)
     } else {
         // Set the type and stream the content as the response body (This means that the file content was NOT cached in memory)
-        return res.type(extension).stream(file.content)
+        res.setHeader("ETag", file.etag).type(extension).stream(file.content)
     }
 }

@@ -1,43 +1,44 @@
 import { env } from "~/env.js"
 import type { Handler } from "./types.js"
-import { Readable } from "node:stream"
+import type { SSEventStream } from "hyper-express"
 
 export class LiveReloadController {
-    feed: Handler = (_req, res) => {
+    private streams = new Map<string, SSEventStream>()
+
+    private delay(ms: number, { persistent = true } = {}) {
+        return new Promise((resolve) => setTimeout(resolve, ms, persistent))
+    }
+
+    async *streamEvents() {
+        yield "event: refresh\n"
+        yield "data: refresh\n"
+        yield "\n\n"
+
+        while (true) {
+            await this.delay(30000, { persistent: false })
+            yield "event: ping\n"
+            yield "data: ping\n"
+            yield "\n\n"
+        }
+    }
+
+    feed: Handler = async (_req, res) => {
         if (env.NODE_ENV !== "development")
             return res.status(404).send("Not Found")
 
-        res.setHeader("Content-Type", "text/event-stream")
+        if (res.sse) {
+            res.sse.open()
+            const id = crypto.randomUUID()
+            res.sse.id = id
+            this.streams.set(id, res.sse)
+            for await (const event of this.streamEvents()) {
+                if (!res.sse.active) break
 
-        return createReadableStream().pipe(res)
-    }
-}
-
-function delay(ms: number, { persistent = true } = {}) {
-    return new Promise((resolve) => setTimeout(resolve, ms, persistent))
-}
-
-async function* streamEvents() {
-    yield "event: refresh\n"
-    yield "data: refresh\n"
-    yield "\n\n"
-
-    while (true) {
-        await delay(30000, { persistent: false })
-        yield "event: ping\n"
-        yield "data: ping\n"
-        yield "\n\n"
-    }
-}
-
-function createReadableStream() {
-    const readable = new Readable({
-        async read() {
-            for await (const chunk of streamEvents()) {
-                // Push the chunk to the stream
-                this.push(chunk)
+                res.sse.send(event)
             }
-        },
-    })
-    return readable
+            res.once("close", () => this.streams.delete(id))
+        } else {
+            res.status(400).send("SSE not supported")
+        }
+    }
 }
