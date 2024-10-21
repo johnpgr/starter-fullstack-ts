@@ -1,10 +1,10 @@
+import { join } from "path"
 import { DataSource } from "typeorm"
-import * as entities from "~/models/*.js"
 
 export const AppDataSource = new DataSource({
     type: "better-sqlite3",
     database: "./database/db.sqlite",
-    entities,
+    entities: [join(import.meta.dirname, "models", "*.js")],
     synchronize: true,
 })
 

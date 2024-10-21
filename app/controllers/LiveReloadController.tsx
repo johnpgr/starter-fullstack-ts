@@ -1,6 +1,5 @@
 import { env } from "~/env.js"
-import type { Handler } from "./types.js"
-import type { SSEventStream } from "hyper-express"
+import type { Handler, SSEventStream } from "hyper-express"
 
 export class LiveReloadController {
     private streams = new Map<string, SSEventStream>()

@@ -1,8 +1,8 @@
 import { AuthController } from "~/controllers/AuthController.js"
 import { HomeController } from "~/controllers/HomeController.js"
 import { Router } from "hyper-express"
-import { assets } from "./assets.js"
-import { ctx } from "./middleware.js"
+import { assets } from "./middlewares/assets.js"
+import { ctx } from "./middlewares/ctx.js"
 import { LiveReloadController } from "./controllers/LiveReloadController.js"
 
 const homeController = new HomeController()

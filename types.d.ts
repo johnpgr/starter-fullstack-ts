@@ -1,4 +1,4 @@
-import type { SSEventStream } from "hyper-express";
+import type { MiddlewareHandler, SSEventStream } from "hyper-express";
 
 //until https://github.com/kartikk221/hyper-express/pull/317 is merged
 declare module "hyper-express" {
@@ -8,4 +8,6 @@ declare module "hyper-express" {
     interface SSEventStream {
         id?: string | undefined
     }
+    // just a type rename
+    type Handler = MiddlewareHandler
 }

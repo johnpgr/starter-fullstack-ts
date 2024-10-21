@@ -1,12 +1,12 @@
 import { is, tags } from "typia"
-import type { Handler } from "./types.js"
 import { User } from "~/models/User.js"
 import { hash, verify } from "@node-rs/argon2"
 import { config } from "~/config.js"
-import { hxRedirect, render } from "./utils.js"
+import { hxRedirect, render } from "../utils/response.js"
 import { AuthHelper } from "~/helpers/AuthHelper.js"
 import { SigninPage } from "~/views/auth/SigninPage.js"
 import { SignupPage } from "~/views/auth/SignupPage.js"
+import type { Handler } from "hyper-express"
 
 export class AuthController {
     showSignup: Handler = (req, res) => render(res, <SignupPage req={req} />)
