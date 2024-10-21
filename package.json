@@ -11,15 +11,16 @@
     },
     "scripts": {
         "build": "tsc",
-        "start": "NODE_ENV=production node --env-file=.env ./dist/app/server.js",
-        "dev": "NODE_ENV=development node ./cmd/dev.js",
-        "debug": "NODE_ENV=debug node --env-file=.env --inspect-brk ./dist/app/server.js",
+        "start": "NODE_ENV=production node -r dotenv/config ./dist/app/server.js",
+        "dev": "NODE_ENV=development concurrently \"tsc --watch --preserveWatchOutput\" \"nodemon -r dotenv/config dist/app/server.js\"",
         "format": "prettier --write .",
-        "xss-scan": "xss-scan",
         "prepare": "ts-patch install && typia patch"
     },
     "devDependencies": {
         "@types/node": "^22.7.7",
+        "concurrently": "^9.0.1",
+        "dotenv": "^16.4.5",
+        "nodemon": "^3.1.7",
         "prettier": "^3.3.3",
         "ts-patch": "^3.2.1",
         "typescript": "5.5.4",

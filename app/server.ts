@@ -2,11 +2,11 @@ import "./env.js"
 import { AppDataSource } from "./database.js"
 import { Server } from "hyper-express"
 import { router } from "./router.js"
-import { ctx } from "./middleware.js"
+import { env } from "./env.js"
 
 await AppDataSource.initialize()
-
-await new Server()
-    .use(ctx)
+new Server()
     .use("/", router)
-    .listen(3000, (_socket) => console.log("Webserver started on port " + 3000))
+    .listen(env.PORT)
+    .then((e) => console.log("Server started on port", env.PORT))
+    .catch((e) => console.error("Failed to start server on port", env.PORT))

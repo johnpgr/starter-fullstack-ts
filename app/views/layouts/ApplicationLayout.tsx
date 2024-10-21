@@ -1,13 +1,13 @@
 import type { PropsWithChildren } from "@kitajs/html"
 import { UserInfo } from "../auth/UserInfo.js"
 import type { Request } from "hyper-express"
+import { env } from "~/env.js"
 
 export function ApplicationLayout(
     props: PropsWithChildren<{
-        head?: JSX.Element
         req: Request
-        title?: string
-    }>
+        title: string
+    }>,
 ) {
     return (
         <>
@@ -19,11 +19,13 @@ export function ApplicationLayout(
                         name="viewport"
                         content="width=device-width, initial-scale=1.0"
                     />
-                    <title>{props.title || "Hello World"}</title>
+                    <title>{props.title}</title>
                     <script src="/assets/htmx.js"></script>
                     <script defer src="/assets/json-enc.js"></script>
                     <script defer src="/assets/response-targets.js"></script>
-                    {props.head}
+                    {env.NODE_ENV === "development" ? (
+                        <script defer src="/assets/live-reload.js"></script>
+                    ) : null}
                 </head>
                 <body hx-boost="true" hx-ext="json-enc, response-targets">
                     <header class="flex items-center justify-end min-h-12 px-4 w-full bg-primary-content">
