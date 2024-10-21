@@ -6,7 +6,6 @@ export function HomePage(props: { req: Request }) {
         <ApplicationLayout req={props.req} title="Home">
             <main>
                 <h1>Hello World</h1>
-                <h2>Test reload</h2>
             </main>
         </ApplicationLayout>
     )

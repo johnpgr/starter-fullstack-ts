@@ -1,6 +1,11 @@
 import { env } from "~/env.js"
 import type { Handler, SSEventStream } from "hyper-express"
 
+const enum Event {
+    Refresh = "refresh",
+    Ping = "ping",
+}
+
 export class LiveReloadController {
     private streams = new Map<string, SSEventStream>()
 
@@ -9,15 +14,11 @@ export class LiveReloadController {
     }
 
     async *streamEvents() {
-        yield "event: refresh\n"
-        yield "data: refresh\n"
-        yield "\n\n"
+        yield Event.Refresh
 
         while (true) {
             await this.delay(30000, { persistent: false })
-            yield "event: ping\n"
-            yield "data: ping\n"
-            yield "\n\n"
+            yield Event.Ping
         }
     }
 
@@ -33,7 +34,7 @@ export class LiveReloadController {
             for await (const event of this.streamEvents()) {
                 if (!res.sse.active) break
 
-                res.sse.send(event)
+                res.sse.send(event, event)
             }
             res.once("close", () => this.streams.delete(id))
         } else {
