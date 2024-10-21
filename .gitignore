@@ -1,3 +1,4 @@
 dist/
+database/*.sqlite
 node_modules/
 .env

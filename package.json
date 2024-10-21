@@ -2,22 +2,40 @@
     "name": "my-fullstack-framework",
     "version": "0.0.0",
     "private": true,
-    "type": "module",
-    "scripts": {
-        "format": "prettier --write .",
-        "prepare": "ts-patch install && typia patch"
-    },
     "author": "johnpgr",
     "license": "UNLICENSED",
-    "description": "",
+    "description": "Fullstack Node.js starterkit for server rendered html templates with JSX",
+    "type": "module",
+    "engines": {
+        "node": "22.x"
+    },
+    "scripts": {
+        "build": "tsc",
+        "start": "NODE_ENV=production node --env-file=.env ./dist/app/server.js",
+        "dev": "NODE_ENV=development node ./cmd/dev.js",
+        "debug": "NODE_ENV=debug node --env-file=.env --inspect-brk ./dist/app/server.js",
+        "format": "prettier --write .",
+        "xss-scan": "xss-scan",
+        "prepare": "ts-patch install && typia patch"
+    },
     "devDependencies": {
+        "@types/node": "^22.7.7",
         "prettier": "^3.3.3",
         "ts-patch": "^3.2.1",
-        "typescript": "^5.6.3"
+        "typescript": "5.5.4",
+        "typescript-transform-paths": "^3.5.1"
     },
     "dependencies": {
+        "@kitajs/html": "^4.2.4",
+        "@kitajs/ts-html-plugin": "^4.1.0",
+        "@node-rs/argon2": "^2.0.0",
+        "@oslojs/crypto": "^1.0.1",
+        "@oslojs/encoding": "^1.1.0",
         "better-sqlite3": "^11.4.0",
         "hyper-express": "^6.17.2",
+        "jose": "^5.9.6",
+        "live-directory": "^3.0.3",
+        "typeorm": "^0.3.20",
         "typia": "^6.11.2"
     },
     "prettier": {
