@@ -21,16 +21,11 @@ export function ApplicationLayout(
                     />
                     <title>{props.title || "Hello World"}</title>
                     <script src="/assets/htmx.js"></script>
-                    <script src="/assets/htmx-json-enc.js"></script>
-                    {/* <script */}
-                    {/*     src="https://unpkg.com/htmx.org@2.0.3" */}
-                    {/*     integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" */}
-                    {/*     crossorigin="anonymous" */}
-                    {/* ></script> */}
-                    {/* <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script> */}
+                    <script defer src="/assets/json-enc.js"></script>
+                    <script defer src="/assets/response-targets.js"></script>
                     {props.head}
                 </head>
-                <body hx-ext="json-enc">
+                <body hx-boost="true" hx-ext="json-enc, response-targets">
                     <header class="flex items-center justify-end min-h-12 px-4 w-full bg-primary-content">
                         <nav></nav>
                         <UserInfo req={props.req} />

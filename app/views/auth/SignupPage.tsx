@@ -8,7 +8,6 @@ export function SignupPage(props: { req: Request }) {
                 <form
                     class="border border-border rounded-lg p-16 max-w-md flex flex-col gap-4"
                     hx-post="/api/auth/signup"
-                    hx-ext="response-targets"
                     hx-disabled-elt="#submit-btn"
                     hx-indicator="#loading"
                     hx-target-error="#errors"

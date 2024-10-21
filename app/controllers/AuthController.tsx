@@ -1,10 +1,9 @@
 import { is, tags } from "typia"
 import type { Handler } from "./types.js"
-import { QueryBuilder } from "~/database.js"
 import { User } from "~/models/User.js"
 import { hash, verify } from "@node-rs/argon2"
 import { config } from "~/config.js"
-import { render } from "./utils.js"
+import { hxRedirect, render } from "./utils.js"
 import { AuthHelper } from "~/helpers/AuthHelper.js"
 import { SigninPage } from "~/views/auth/SigninPage.js"
 import { SignupPage } from "~/views/auth/SignupPage.js"
@@ -25,13 +24,9 @@ export class AuthController {
             return res.status(400).send("Invalid request body")
         }
 
-        const exists = await QueryBuilder.select("user")
-            .where("user.email = :email OR user.username = :username", {
-                username: body.username,
-                email: body.email,
-            })
-            .from(User, "user")
-            .getOne()
+        const exists = await User.findOne({
+            where: [{ email: body.email }, { name: body.username }],
+        })
 
         if (exists) {
             return res.status(409).send("User already exists")
@@ -71,12 +66,12 @@ export class AuthController {
             sameSite: "strict",
         })
 
-        return res.redirect("/")
+        return hxRedirect(res, "/")
     }
 
     handleSignin: Handler = async (req, res) => {
         type SigninBody = {
-            usernameOrEmail: string
+            sub: string
             password: string
         }
 
@@ -85,19 +80,16 @@ export class AuthController {
             return res.status(400).send("Invalid request body")
         }
 
-        const user = await QueryBuilder.select("user")
-            .where(
-                "user.email = :usernameOrEmail OR user.name = :usernameOrEmail",
-                { userNameOrEmail: body.usernameOrEmail },
-            )
-            .from(User, "user")
-            .getOne()
+        const user = await User.findOne({
+            where: [{ email: body.sub }, { name: body.sub }],
+        })
 
         if (!user) {
             return res.status(400).send("Invalid credentials")
         }
 
         const valid = await verify(user.hashedPassword, body.password)
+        console.log("valid:", valid)
 
         if (!valid) {
             return res.status(400).send("Invalid credentials")
@@ -132,6 +124,6 @@ export class AuthController {
             sameSite: "strict",
         })
 
-        return res.redirect("/")
+        return hxRedirect(res, "/")
     }
 }

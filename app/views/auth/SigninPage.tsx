@@ -8,7 +8,6 @@ export function SigninPage(props: { req: Request }) {
                 <form
                     class="border border-border rounded-lg p-16 max-w-md flex flex-col gap-4"
                     hx-post="/api/auth/signin"
-                    hx-ext="response-targets"
                     hx-disabled-elt="#submit-btn"
                     hx-indicator="#loading"
                     hx-target-error="#errors"
@@ -17,8 +16,8 @@ export function SigninPage(props: { req: Request }) {
                         <i data-lucide="user" class="w-4 h-4" />
                         <input
                             class="grow"
-                            placeholder="Username"
-                            name="username"
+                            placeholder="Username or Email"
+                            name="sub"
                             required={true}
                             type="text"
                         />
