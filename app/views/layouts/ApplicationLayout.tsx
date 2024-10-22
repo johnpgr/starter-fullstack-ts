@@ -28,8 +28,8 @@ export function ApplicationLayout(
                     ) : null}
                     <link rel="stylesheet" href="/assets/css/styles.css" />
                 </head>
-                <body hx-boost="true" hx-ext="json-enc, response-targets">
-                    <header class="flex items-center justify-end min-h-12 px-4 w-full bg-primary-content">
+                <body hx-boost="true" hx-ext="json-enc, response-targets" data-theme="nord">
+                    <header class="flex items-center justify-end min-h-12 px-4 w-full bg-neutral">
                         <nav></nav>
                         <UserInfo req={props.req} />
                     </header>
