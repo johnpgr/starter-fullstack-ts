@@ -89,11 +89,14 @@ export namespace AuthHelper {
     }
 
     export async function validateSessionToken(
-        token: string,
+        accessToken: string,
     ): Promise<Session | ValidateSessionTokenError> {
-        const sessionId = encodeHexLowerCase(
-            sha256(encoder.encode(token)),
+        const token = await jose.jwtDecrypt(
+            accessToken,
+            jose.base64url.decode(env.JWT_SECRET),
         )
+        const sessionId = token.payload.sessionToken as string
+
         const session = await Session.findOneBy({
             id: sessionId,
         })

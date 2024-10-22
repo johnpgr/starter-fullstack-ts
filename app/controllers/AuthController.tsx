@@ -53,6 +53,7 @@ export class AuthController {
             await AuthHelper.createTokens(session)
 
         res.cookie("access_token", accessToken, config.accessTokenExp, {
+            path: "/",
             maxAge: config.accessTokenExp,
             httpOnly: true,
             secure: true,
@@ -60,6 +61,7 @@ export class AuthController {
         })
 
         res.cookie("refresh_token", refreshToken, config.refreshTokenExp, {
+            path: "/",
             maxAge: config.refreshTokenExp,
             httpOnly: true,
             secure: true,
@@ -89,7 +91,6 @@ export class AuthController {
         }
 
         const valid = await verify(user.hashedPassword, body.password)
-        console.log("valid:", valid)
 
         if (!valid) {
             return res.status(400).send("Invalid credentials")
@@ -111,14 +112,16 @@ export class AuthController {
             await AuthHelper.createTokens(session)
 
         res.cookie("access_token", accessToken, config.accessTokenExp, {
-            maxAge: config.accessTokenExp,
+            path: "/",
+            maxAge: config.accessTokenExp / 1000,
             httpOnly: true,
             secure: true,
             sameSite: "strict",
         })
 
         res.cookie("refresh_token", refreshToken, config.refreshTokenExp, {
-            maxAge: config.refreshTokenExp,
+            path: "/",
+            maxAge: config.refreshTokenExp / 1000,
             httpOnly: true,
             secure: true,
             sameSite: "strict",

@@ -7,13 +7,19 @@ import { Context } from "../context.js"
 export const ctx: MiddlewareHandler = (req, _res, next) => {
     const ctx = Context.bind(req)
 
-    const sessionToken = req.cookies.sessionToken
-    if (!sessionToken) return next()
+    const accessToken = req.cookies["access_token"]
+    const refreshToken = req.cookies["access_token"]
 
-    return AuthHelper.validateSessionToken(sessionToken)
+    if (!accessToken || !refreshToken) {
+        next()
+        return
+    }
+
+    AuthHelper.validateSessionToken(accessToken)
         .then((result) => {
             if (result instanceof ValidateSessionTokenError) {
-                return next()
+                next()
+                return
             }
             ctx.session = result
             next()
