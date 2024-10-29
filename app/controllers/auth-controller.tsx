@@ -1,24 +1,35 @@
-import { is, tags } from "typia"
-import { User } from "~/models/User.js"
+import { is } from "typia"
+import { User } from "~/models/user.js"
 import { hash, verify } from "@node-rs/argon2"
 import { config } from "~/config.js"
 import { hxRedirect, render } from "../utils/response.js"
-import { AuthHelper } from "~/helpers/AuthHelper.js"
-import { SigninPage } from "~/views/auth/SigninPage.js"
-import { SignupPage } from "~/views/auth/SignupPage.js"
-import type { Handler } from "hyper-express"
+import { AuthHelper } from "~/helpers/auth-helper.js"
+import { SigninPage } from "~/views/auth/signin-page.js"
+import { SignupPage } from "~/views/auth/signup-page.js"
+import type { Request, Response } from "hyper-express"
+import type { SigninBody, SignupBody } from "~/types/auth.js"
+import { BaseController } from "./base-controller.js"
 
-export class AuthController {
-    showSignup: Handler = (req, res) => render(res, <SignupPage req={req} />)
-    showSignin: Handler = (req, res) => render(res, <SigninPage req={req} />)
+export class AuthController extends BaseController {
+    constructor() {
+        super()
 
-    handleSignup: Handler = async (req, res) => {
-        type SignupBody = {
-            email: string & tags.Format<"email">
-            username: string & tags.Pattern<"^[a-zA-Z0-9_]{3,16}$">
-            password: string & tags.Format<"password">
-        }
+        this.router.get("/signup", this.showSignup)
+        this.router.get("/signin", this.showSignin)
+        this.router.post("/signup", this.handleSignup)
+        this.router.post("/signin", this.handleSignin)
+        this.router.post("/signout", this.handleSignout)
+    }
 
+    showSignup(req: Request, res: Response) {
+        return render(res, <SignupPage req={req} />)
+    }
+
+    showSignin(req: Request, res: Response) {
+        return render(res, <SigninPage req={req} />)
+    }
+
+    async handleSignup(req: Request, res: Response) {
         const body = await req.json()
         if (!is<SignupBody>(body)) {
             return res.status(400).send("Invalid request body")
@@ -71,12 +82,7 @@ export class AuthController {
         return hxRedirect(res, "/")
     }
 
-    handleSignin: Handler = async (req, res) => {
-        type SigninBody = {
-            sub: string
-            password: string
-        }
-
+    async handleSignin(req: Request, res: Response) {
         const body = await req.json()
         if (!is<SigninBody>(body)) {
             return res.status(400).send("Invalid request body")
@@ -130,11 +136,11 @@ export class AuthController {
         return hxRedirect(res, "/")
     }
 
-    handleSignout: Handler = async (req, res) => {
+    async handleSignout(req: Request, res: Response) {
         const accessToken = req.cookies["access_token"]
         const refreshToken = req.cookies["refresh_token"]
 
-        if(accessToken){
+        if (accessToken) {
         }
     }
 }

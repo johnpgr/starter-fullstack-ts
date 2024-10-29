@@ -1,12 +1,7 @@
-import {
-    BaseEntity,
-    Column,
-    Entity,
-    ManyToOne,
-    PrimaryColumn,
-    type Relation,
-} from "typeorm"
-import { User } from "./User.js"
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryColumn } from "typeorm"
+import type { Relation } from "typeorm"
+
+import { User } from "./user.js"
 
 @Entity()
 export class Session extends BaseEntity {

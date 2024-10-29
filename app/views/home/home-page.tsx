@@ -1,5 +1,5 @@
 import type { Request } from "hyper-express"
-import { ApplicationLayout } from "~/views/layouts/ApplicationLayout.js"
+import { ApplicationLayout } from "~/views/layouts/application-layout.js"
 
 export function HomePage(props: { req: Request }) {
     return (

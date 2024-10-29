@@ -1,5 +1,8 @@
 import type { MiddlewareHandler } from "hyper-express"
-import { AuthHelper, ValidateSessionTokenError } from "../helpers/AuthHelper.js"
+import {
+    AuthHelper,
+    ValidateSessionTokenError,
+} from "../helpers/auth-helper.js"
 import { Context } from "../context.js"
 
 //BUG: if you do an async function here it will bug and crash the app

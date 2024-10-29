@@ -19,11 +19,16 @@
         "moduleResolution": "NodeNext",
         "outDir": "dist",
         "paths": {
-            "~/*": ["./app/*"]
+            "~/*": [
+                "./app/*"
+            ]
         },
         "jsx": "react-jsx",
         "jsxImportSource": "@kitajs/html",
-        "types": ["@kitajs/html/htmx.d.ts", "@types/node"],
+        "types": [
+            "@kitajs/html/htmx.d.ts",
+            "@types/node"
+        ],
         "plugins": [
             {
                 "transform": "typescript-transform-paths"
@@ -36,5 +41,10 @@
             }
         ]
     },
-    "exclude": ["cmd", "dist", "node_modules"]
+    "exclude": [
+        "tailwind.config.js",
+        "cmd",
+        "dist",
+        "node_modules"
+    ]
 }

@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from "@kitajs/html"
-import { UserInfo } from "../auth/UserInfo.js"
+import { UserInfo } from "../auth/user-info.js"
 import type { Request } from "hyper-express"
 import { env } from "~/env.js"
 
@@ -28,7 +28,11 @@ export function ApplicationLayout(
                     ) : null}
                     <link rel="stylesheet" href="/assets/css/styles.css" />
                 </head>
-                <body hx-boost="true" hx-ext="json-enc, response-targets" data-theme="nord">
+                <body
+                    hx-boost="true"
+                    hx-ext="json-enc, response-targets"
+                    data-theme="nord"
+                >
                     <header class="flex items-center justify-end min-h-12 px-4 w-full bg-neutral">
                         <nav></nav>
                         <UserInfo req={props.req} />

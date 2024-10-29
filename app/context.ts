@@ -1,5 +1,5 @@
 import type { Request } from "hyper-express"
-import type { Session } from "./models/Session.js"
+import type { Session } from "./models/session.js"
 import { raise } from "./utils/raise.js"
 
 export class Context {

@@ -5,8 +5,8 @@ import {
     encodeHexLowerCase,
 } from "@oslojs/encoding"
 import { config } from "~/config.js"
-import { Session } from "~/models/Session.js"
-import type { User } from "~/models/User.js"
+import { Session } from "~/models/session.js"
+import type { User } from "~/models/user.js"
 import { env } from "~/env.js"
 
 export type RefreshToken = string
