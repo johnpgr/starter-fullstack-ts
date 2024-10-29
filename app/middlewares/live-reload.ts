@@ -1,5 +1,5 @@
 import { env } from "~/env.js"
-import type { Handler, SSEventStream } from "hyper-express"
+import type { MiddlewareHandler, SSEventStream } from "hyper-express"
 
 const enum Event {
     Refresh = "refresh",
@@ -21,7 +21,7 @@ async function* streamEvents() {
     }
 }
 
-export const liveReloadHandler: Handler = async (_req, res) => {
+export const liveReload: MiddlewareHandler = async (_req, res) => {
     if (env.NODE_ENV !== "development") return res.status(404).send("Not Found")
 
     if (res.sse) {

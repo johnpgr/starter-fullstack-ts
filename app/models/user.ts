@@ -1,16 +1,29 @@
+import { hash } from "@node-rs/argon2"
 import { Session } from "./session.js"
 import {
     BaseEntity,
+    BeforeInsert,
     Column,
     Entity,
     OneToMany,
-    PrimaryGeneratedColumn,
+    PrimaryColumn,
 } from "typeorm"
 import type { Relation } from "typeorm"
+import { ulid } from "ulid"
 
 @Entity()
 export class User extends BaseEntity {
-    @PrimaryGeneratedColumn("uuid")
+    @BeforeInsert()
+    generateId() {
+        this.id = ulid()
+    }
+
+    @BeforeInsert()
+    async hashPassword() {
+        this.password = await hash(this.password)
+    }
+
+    @PrimaryColumn()
     id: string
 
     @Column({ unique: true })
@@ -20,7 +33,7 @@ export class User extends BaseEntity {
     email: string
 
     @Column()
-    hashedPassword: string
+    password: string
 
     @OneToMany(() => Session, (session) => session.user)
     sessions: Relation<Session[]>

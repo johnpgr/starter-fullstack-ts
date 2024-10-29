@@ -20,17 +20,15 @@ export function ApplicationLayout(
                         content="width=device-width, initial-scale=1.0"
                     />
                     <title>{props.title}</title>
-                    <script src="/assets/js/htmx.js"></script>
-                    <script defer src="/assets/js/json-enc.js"></script>
-                    <script defer src="/assets/js/response-targets.js"></script>
+                    <script src="/assets/scripts/htmx.js" />
                     {env.NODE_ENV === "development" ? (
-                        <script defer src="/assets/js/live-reload.js"></script>
+                        <script async src="/assets/scripts/live-reload.js" />
                     ) : null}
-                    <link rel="stylesheet" href="/assets/css/styles.css" />
+                    <link rel="stylesheet" href="/assets/styles/globals.css" />
                 </head>
                 <body
                     hx-boost="true"
-                    hx-ext="json-enc, response-targets"
+                    hx-ext="json-enc-custom, response-targets"
                     data-theme="nord"
                 >
                     <header class="flex items-center justify-end min-h-12 px-4 w-full bg-neutral">

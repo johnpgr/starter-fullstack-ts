@@ -26,6 +26,7 @@
         "jsx": "react-jsx",
         "jsxImportSource": "@kitajs/html",
         "types": [
+            "./patch-hyper-express.d.ts",
             "@kitajs/html/htmx.d.ts",
             "@types/node"
         ],
@@ -41,6 +42,9 @@
             }
         ]
     },
+    "include": [
+        "./app/"
+    ],
     "exclude": [
         "tailwind.config.js",
         "cmd",

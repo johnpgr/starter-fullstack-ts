@@ -1,7 +1,7 @@
 import type { MiddlewareHandler } from "hyper-express"
 import LiveDirectory from "live-directory"
 
-const liveAssets = new LiveDirectory("./app/assets", {
+const liveAssets = new LiveDirectory("./assets", {
     filter: {
         keep: {
             extensions: ["css", "js", "json", "png", "jpg", "jpeg"],
@@ -16,7 +16,6 @@ const liveAssets = new LiveDirectory("./app/assets", {
         max_file_size: 1024 * 1024, // All files under 1 MB will be cached
     },
 })
-
 
 export const assets: MiddlewareHandler = (req, res) => {
     // Strip away '/assets' from the request path to get asset relative path lookup from our LiveDirectory instance.

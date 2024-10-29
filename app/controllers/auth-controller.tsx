@@ -1,8 +1,7 @@
 import { is } from "typia"
 import { User } from "~/models/user.js"
-import { hash, verify } from "@node-rs/argon2"
+import { verify } from "@node-rs/argon2"
 import { config } from "~/config.js"
-import { hxRedirect, render } from "../utils/response.js"
 import { AuthHelper } from "~/helpers/auth-helper.js"
 import { SigninPage } from "~/views/auth/signin-page.js"
 import { SignupPage } from "~/views/auth/signup-page.js"
@@ -22,11 +21,11 @@ export class AuthController extends BaseController {
     }
 
     showSignup(req: Request, res: Response) {
-        return render(res, <SignupPage req={req} />)
+        return res.render(<SignupPage req={req} />)
     }
 
     showSignin(req: Request, res: Response) {
-        return render(res, <SigninPage req={req} />)
+        return res.render(<SigninPage req={req} />)
     }
 
     async handleSignup(req: Request, res: Response) {
@@ -42,10 +41,11 @@ export class AuthController extends BaseController {
         if (exists) {
             return res.status(409).send("User already exists")
         }
+
         const user = new User()
         user.email = body.email
         user.name = body.username
-        user.hashedPassword = await hash(body.password)
+        user.password = body.password
         await user.save()
 
         const ip = req.ip || req.headers["x-forwarded-for"]
@@ -79,7 +79,7 @@ export class AuthController extends BaseController {
             sameSite: "strict",
         })
 
-        return hxRedirect(res, "/")
+        return res.hxRedirect("/")
     }
 
     async handleSignin(req: Request, res: Response) {
@@ -96,7 +96,7 @@ export class AuthController extends BaseController {
             return res.status(400).send("Invalid credentials")
         }
 
-        const valid = await verify(user.hashedPassword, body.password)
+        const valid = await verify(user.password, body.password)
 
         if (!valid) {
             return res.status(400).send("Invalid credentials")
@@ -133,7 +133,7 @@ export class AuthController extends BaseController {
             sameSite: "strict",
         })
 
-        return hxRedirect(res, "/")
+        return res.hxRedirect("/")
     }
 
     async handleSignout(req: Request, res: Response) {

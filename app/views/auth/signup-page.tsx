@@ -1,5 +1,6 @@
 import type { Request } from "hyper-express"
 import { ApplicationLayout } from "../layouts/application-layout.js"
+import { h } from "preact"
 
 export function SignupPage(props: { req: Request }) {
     return (
