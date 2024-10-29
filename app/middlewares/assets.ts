@@ -4,7 +4,7 @@ import LiveDirectory from "live-directory"
 const liveAssets = new LiveDirectory("./assets", {
     filter: {
         keep: {
-            extensions: ["css", "js", "json", "png", "jpg", "jpeg"],
+            extensions: ["css", "js", "gz", "json", "png", "jpg", "jpeg"],
         },
         ignore: (path) => {
             return path.startsWith(".")
@@ -20,7 +20,7 @@ const liveAssets = new LiveDirectory("./assets", {
 export const assets: MiddlewareHandler = (req, res) => {
     // Strip away '/assets' from the request path to get asset relative path lookup from our LiveDirectory instance.
     const path = req.path.replace("/assets", "")
-    const file = liveAssets.get(path)
+    let file = liveAssets.get(path)
 
     // Return a 404 if no asset/file exists on the derived path
     if (!file) return res.status(404).send()
@@ -35,6 +35,15 @@ export const assets: MiddlewareHandler = (req, res) => {
     if (clientEtag === file.etag) {
         res.status(304).send()
         return
+    }
+
+    const requestAcceptsGzip = req.headers["accept-encoding"]?.includes("gzip")
+    if (requestAcceptsGzip) {
+        const gzipped = liveAssets.get(`${path}.gz`)
+        if (gzipped) {
+            file = gzipped
+            res.setHeader("Content-Encoding", "gzip")
+        }
     }
 
     if (file.content instanceof Buffer) {

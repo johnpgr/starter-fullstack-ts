@@ -10,11 +10,12 @@
         "node": "22.x"
     },
     "scripts": {
-        "build": "tsc",
-        "build:browser": "rollup -c",
+        "build": "pnpm build:browser && tsc",
+        "build:browser": " rollup -c && pnpm tailwind && pnpm compress-assets",
+        "compress-assets": "gzip -k -f ./assets/scripts/htmx.js && gzip -k -f ./assets/styles/globals.css",
         "start": "NODE_ENV=production node -r dotenv/config ./dist/app/server.js",
         "dev": "NODE_ENV=development concurrently \"tsc --watch --preserveWatchOutput\" \"nodemon -r dotenv/config dist/app/server.js\" \"pnpm tailwind:dev\"",
-        "tailwind": "tailwindcss -i ./app/styles/globals.css -o ./assets/styles/globals.css --watch --minify",
+        "tailwind": "tailwindcss -i ./app/styles/globals.css -o ./assets/styles/globals.css --minify",
         "tailwind:dev": "tailwindcss -i ./app/styles/globals.css -o ./assets/styles/globals.css --watch --minify",
         "format": "prettier --write ./app",
         "prepare": "ts-patch install && typia patch"
